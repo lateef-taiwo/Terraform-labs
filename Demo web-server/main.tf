@@ -75,6 +75,7 @@ resource "aws_default_vpc" "default" {
 
 }
 
+/*
 resource "aws_instance" "vm-server" {
   ami                    = data.aws_ami.amazon-linux-2.id
   instance_type          = "t2.micro"
@@ -84,5 +85,33 @@ resource "aws_instance" "vm-server" {
 
   tags = {
     Name = "aws-webserver-demo"
+  }
+}
+*/
+
+resource "aws_launch_template" "aws-launch-template" {
+  name                   = "aws-launch-template"
+  image_id               = data.aws_ami.amazon-linux-2.id
+  instance_type          = "t2.micro"
+  key_name               = aws_key_pair.abdul-aws-key-pair.key_name
+  vpc_security_group_ids = [aws_security_group.aws-sg-webserver.id]
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name = "aws-webserver-demo"
+    }
+  }
+  user_data = filebase64("userdata.tpl")
+}
+
+resource "aws_autoscaling_group" "aws-autoscaling-group" {
+  availability_zones = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+  desired_capacity   = 2
+  max_size           = 3
+  min_size           = 2
+
+  launch_template {
+    id      = aws_launch_template.aws-launch-template.id
+    version = "$Latest"
   }
 }
