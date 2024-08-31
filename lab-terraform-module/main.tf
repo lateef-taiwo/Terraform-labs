@@ -19,16 +19,18 @@ module "networking" {
 } 
 
 # creating an ec2 instance 
-resource "aws_instance" "web_server" {
-  ami           = "ami-0cf6f5c8a62fa5da6"
-  instance_type = "t2.micro"
-  vpc_security_group_ids = [module.networking.sec_group.id]
-  subnet_id              = module.networking.subnet.id
+# resource "aws_instance" "web_server" {
+#   ami= module.networking.ami.id
+#   instance_type = aws_instance.web_server.instance_type.id
+#   #ami           = "ami-0cf6f5c8a62fa5da6"
+#   #instance_type = "t2.micro"
+#   vpc_security_group_ids = [module.networking.sec_group.id]
+#   subnet_id              = module.networking.subnet.id
 
-  tags = {
-    Name = "my-ec2-instance"
-  }
-}
+#   tags = {
+#     Name = "my-ec2-instance"
+#   }
+# }
 
 
 # Code Review

@@ -1,5 +1,9 @@
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "My-VPC"
+  }
 }
 
 resource "aws_subnet" "public_subnet" {
@@ -7,10 +11,19 @@ resource "aws_subnet" "public_subnet" {
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-west-2a"
 
+  tags = {
+    Name = "My-Subnet"
+  }
 }
 
 resource "aws_instance" "web_server" {
-  public_ip = aws_instance.web_server.public_ip
+  ami           = "ami-0cf6f5c8a62fa5da6"
+  instance_type = "t2.micro"
+  #public_ip = aws_instance.web_server.public_ip
+
+  tags = {
+    Name = "my-ec2-instance"
+  }
 }
 
 resource "aws_internet_gateway" "my_ig" {
